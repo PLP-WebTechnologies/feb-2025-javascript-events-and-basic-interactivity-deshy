@@ -1,0 +1,251 @@
+//A simple yet interactive interface for DeshyEdge Consulting where clients can book services.Includes event handling, interactive elements, and form validation.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeshyEdge Consulting - Book a Service</title>
+  <style>
+    /* Basic Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 50px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    button:hover {
+      background-color: #ccc;
+    }
+
+    /* Image Gallery */
+    .gallery {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .gallery img {
+      width: 100px;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    /* Tabs / Accordion */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      margin: 0 5px;
+      background-color: #ddd;
+      cursor: pointer;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background-color: #eee;
+      margin-top: 10px;
+    }
+
+    .active-tab {
+      background-color: #ddd;
+      color: #333;
+    }
+
+    /* Form Styles */
+    form {
+      display: inline-block;
+      text-align: left;
+      margin-top: 50px;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 10px 0;
+      width: 200px;
+    }
+
+    .form-feedback {
+      font-size: 12px;
+      color: red;
+    }
+
+    /* Animation */
+    .animated {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .animated:hover {
+      transform: scale(1.1);
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Welcome to DeshyEdge Consulting</h1>
+  <p>Book a service with us!</p>
+
+  <!-- Event Handling -->
+  <button id="actionButton" class="animated">Click Me to Book</button>
+
+  <!-- Interactive Elements -->
+  <h3>Our Services</h3>
+  <div class="gallery">
+    <img src="https://via.placeholder.com/100" alt="Service 1">
+    <img src="https://via.placeholder.com/100" alt="Service 2">
+    <img src="https://via.placeholder.com/100" alt="Service 3">
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab" id="tab1">Service 1</div>
+    <div class="tab" id="tab2">Service 2</div>
+    <div class="tab" id="tab3">Service 3</div>
+  </div>
+
+  <div class="tab-content" id="content1">
+    <p>Details about Service 1.</p>
+  </div>
+  <div class="tab-content" id="content2">
+    <p>Details about Service 2.</p>
+  </div>
+  <div class="tab-content" id="content3">
+    <p>Details about Service 3.</p>
+  </div>
+
+  <!-- Form -->
+  <h3>Book a Service</h3>
+  <form id="bookingForm">
+    <input type="text" id="fullName" placeholder="Full Name" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password (Min 8 characters)" required><br>
+    <button type="submit">Submit Booking</button>
+    <div class="form-feedback" id="formFeedback"></div>
+  </form>
+
+  <script>
+    // 1. Event Handling
+    const actionButton = document.getElementById("actionButton");
+
+    // Button click
+    actionButton.addEventListener("click", () => {
+      actionButton.textContent = "Thank you for booking!";
+      actionButton.style.backgroundColor = "#4CAF50";
+    });
+
+    // Hover effect
+    actionButton.addEventListener("mouseover", () => {
+      actionButton.style.backgroundColor = "#888";
+    });
+
+    actionButton.addEventListener("mouseout", () => {
+      actionButton.style.backgroundColor = "";
+    });
+
+    // Keypress detection
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        alert("You pressed Enter!");
+      }
+    });
+
+    // Bonus: Secret action - Double-click or long press
+    let pressTimer;
+    actionButton.addEventListener("dblclick", () => {
+      alert("Double-click detected! Here's a secret message.");
+    });
+
+    actionButton.addEventListener("mousedown", () => {
+      pressTimer = setTimeout(() => {
+        alert("Long press detected!");
+      }, 1000); // 1-second long press
+    });
+
+    actionButton.addEventListener("mouseup", () => {
+      clearTimeout(pressTimer);
+    });
+
+    // 2. Interactive Elements - Tabs
+    const tabs = document.querySelectorAll(".tab");
+    const tabContents = document.querySelectorAll(".tab-content");
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active-tab"));
+        tabContents.forEach((content) => content.style.display = "none");
+
+        tab.classList.add("active-tab");
+        document.getElementById(`content${index + 1}`).style.display = "block";
+      });
+    });
+
+    // Show the first tab content by default
+    document.getElementById("content1").style.display = "block";
+    document.getElementById("tab1").classList.add("active-tab");
+
+    // 3. Form Validation
+    const form = document.getElementById("bookingForm");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password");
+    const feedbackDiv = document.getElementById("formFeedback");
+
+    // Real-time feedback while typing
+    emailField.addEventListener("input", () => {
+      if (!emailField.value.includes("@")) {
+        feedbackDiv.textContent = "Please enter a valid email address.";
+      } else {
+        feedbackDiv.textContent = "";
+      }
+    });
+
+    passwordField.addEventListener("input", () => {
+      if (passwordField.value.length < 8) {
+        feedbackDiv.textContent = "Password must be at least 8 characters long.";
+      } else {
+        feedbackDiv.textContent = "";
+      }
+    });
+
+    // Submit form with validation
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const email = emailField.value;
+      const password = passwordField.value;
+
+      // Basic validation
+      if (!email.includes("@")) {
+        feedbackDiv.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      if (password.length < 8) {
+        feedbackDiv.textContent = "Password must be at least 8 characters long.";
+        return;
+      }
+
+      feedbackDiv.textContent = "Form submitted successfully!";
+    });
+  </script>
+
+</body>
+</html>
